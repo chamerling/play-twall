@@ -11,6 +11,8 @@ GET     /                                       Application.index
 # Ignore favicon requests
 GET     /favicon.ico                            404
 
+WS      /twitter                                WebSocket.twitter
+
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public
 

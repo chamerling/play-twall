@@ -4,3 +4,4 @@ require:
     - play
     - play -> crud
     - play -> secure
+    - org.twitter4j -> twitter4j-stream 2.2.5

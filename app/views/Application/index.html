@@ -1,6 +1,28 @@
 #{extends 'main.html' /}
 #{set title:'Home' /}
 
-<div class="well">
-So what?
 <div>
+  <div id="log"></div>
+</div>
+
+<script type="text/javascript">
+		$(function() {
+			if (window["WebSocket"]) {
+				var conn = new WebSocket('@@{WebSocket.twitter()}');
+
+				conn.onmessage = function(evt) {
+					//$("#log").text(evt.data);
+					$('#log').prepend('<div class=\"alert-message info\">' + evt.data + '</div>');        
+									
+				};
+
+				conn.onclose = function(evt) {
+					$("#log").prepend('<div class=\"alert-message error\">Socket closed</div>');
+				};
+				
+			} else {
+				$("#log").prepend('<div class=\"alert-message error\">Browser does not support web sockets</div>')
+			}
+		});
+		
+</script>
