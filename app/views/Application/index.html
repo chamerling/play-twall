@@ -1,8 +1,8 @@
 #{extends 'main.html' /}
-#{set title:'Home' /}
+#{set title:'Twitter Live Stream' /}
 
 <div>
-  <div id="log"></div>
+	<div id="log"></div>
 </div>
 
 <script type="text/javascript">
@@ -11,9 +11,16 @@
 				var conn = new WebSocket('@@{WebSocket.twitter()}');
 
 				conn.onmessage = function(evt) {
-					//$("#log").text(evt.data);
-					$('#log').prepend('<div class=\"alert-message info\">' + evt.data + '</div>');        
-									
+					var d = $.parseJSON(evt.data);
+				
+					var tweet = d.status;
+					
+					var status = tweet.replace(/((https?|s?ftp|ssh)\:\/\/[^"\s\<\>]*[^.,;'">\:\s\<\>\)\]\!])/g, function(url) {
+					      return '<a href="'+url+'">'+url+'</a>';
+					    }).replace(/\B@([_a-z0-9]+)/ig, function(reply) {
+					      return  reply.charAt(0)+'<a href="http://twitter.com/'+reply.substring(1)+'">'+reply.substring(1)+'</a>';
+					    });
+					$('#log').prepend('<h3><a href=\"http://twitter.com/' + d.screenname + '\">' + d.screenname + '</a><small> ' + d.user + ' </small></h3><blockquote><p>' + status + '</p> <small>' + d.date + '</small></blockquote>');        
 				};
 
 				conn.onclose = function(evt) {
